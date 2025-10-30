@@ -1,9 +1,10 @@
 import { Metadata } from "next";
 import HomeView from "./_components/home/home-view";
-import { getCatBreeds } from "../lib/api/get-cat-breeds";
+import { getCatBreeds } from "../lib/api/cats/get-cat-breeds";
 import { SearchParams } from "next/dist/server/request/search-params";
 import { PaginationSchema } from "@/types/pagination";
 import { HomePageProvider } from "./_components/home/home-view-context-wrapper";
+import { getDogBreeds } from "@/lib/api/dogs/get-dog-breeds";
 
 type HomePageProps = {
   searchParams: Promise<SearchParams>;
@@ -18,13 +19,16 @@ export const metadata: Metadata = {
 export default async function HomePage({
   searchParams,
 }: Readonly<HomePageProps>) {
-  const validatedSearchParams = PaginationSchema.parse(searchParams);
+  const validatedSearchParams = PaginationSchema.parse(await searchParams);
   const catBreeds = await getCatBreeds({
+    searchParams: validatedSearchParams,
+  });
+  const dogBreeds = await getDogBreeds({
     searchParams: validatedSearchParams,
   });
 
   return (
-    <HomePageProvider catBreeds={catBreeds}>
+    <HomePageProvider catBreeds={catBreeds} dogBreeds={dogBreeds}>
       <HomeView />
     </HomePageProvider>
   );

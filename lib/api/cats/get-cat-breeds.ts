@@ -1,13 +1,14 @@
+import { Breed } from "@/types/breeds";
 import { Pagination } from "@/types/pagination";
 import "dotenv/config";
 
-type getCatBreedsProps = {
+type GetCatBreedsProps = {
   searchParams: Pagination;
 };
 
 export async function getCatBreeds({
   searchParams,
-}: Readonly<getCatBreedsProps>) {
+}: Readonly<GetCatBreedsProps>): Promise<Breed[]> {
   if (!process.env.catsAPIKey)
     throw new Error("Please specify catsAPIKey env variable.");
 

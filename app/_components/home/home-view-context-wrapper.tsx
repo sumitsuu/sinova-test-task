@@ -1,11 +1,12 @@
 // contexts/HomePageContext.tsx
 "use client";
 
-import { Breed } from '@/types/cats'
+import { Breed } from "@/types/breeds";
 import { createContext, useContext, ReactNode } from "react";
 
 interface HomePageContextType {
   catBreeds: Breed[];
+  dogBreeds: Breed[];
 }
 
 const HomePageContext = createContext<HomePageContextType | undefined>(
@@ -15,14 +16,16 @@ const HomePageContext = createContext<HomePageContextType | undefined>(
 interface HomePageProviderProps {
   children: ReactNode;
   catBreeds: Breed[];
+  dogBreeds: Breed[];
 }
 
 export function HomePageProvider({
   children,
   catBreeds,
+  dogBreeds,
 }: Readonly<HomePageProviderProps>) {
   return (
-    <HomePageContext.Provider value={{ catBreeds }}>
+    <HomePageContext.Provider value={{ catBreeds, dogBreeds }}>
       {children}
     </HomePageContext.Provider>
   );
