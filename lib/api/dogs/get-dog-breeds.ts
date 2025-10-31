@@ -1,4 +1,4 @@
-import { Breed } from "@/types/breeds";
+import { DogBreed } from "@/types/breeds";
 import { Pagination } from "@/types/pagination";
 import "dotenv/config";
 
@@ -8,7 +8,7 @@ type GetDogBreedsProps = {
 
 export async function getDogBreeds({
   searchParams,
-}: Readonly<GetDogBreedsProps>): Promise<Breed[]> {
+}: Readonly<GetDogBreedsProps>): Promise<DogBreed[]> {
   if (!process.env.dogsAPIKey)
     throw new Error("Please specify dogsAPIKey env variable.");
 
