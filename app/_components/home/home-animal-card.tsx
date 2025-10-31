@@ -1,4 +1,4 @@
-import { Card, CardDescription, CardHeader } from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Breed } from "@/types/breeds";
 import Image from "next/image";
 
@@ -17,7 +17,7 @@ export default function HomeAnimalCard({
       : `https://cdn2.thedogapi.com/images/${breed.reference_image_id}.jpg`;
 
   return (
-    <Card className="w-full max-w-[200px] h-[300px] opacity-75 hover:opacity-100 duration-350">
+    <Card className="w-full md:max-w-[200px] h-[300px] opacity-75 hover:opacity-100 duration-350">
       <CardHeader className="px-4">
         <div className="relative h-[150px] w-full overflow-hidden rounded-t-lg">
           <Image
@@ -31,9 +31,9 @@ export default function HomeAnimalCard({
           />
         </div>
       </CardHeader>
-      <CardDescription className="font-semibold text-foreground">
+      <CardContent className="font-semibold text-foreground">
         {breed.name}
-      </CardDescription>
+      </CardContent>
     </Card>
   );
 }

@@ -1,7 +1,7 @@
 "use client";
 import { useHomeContext } from "./home-view-context-wrapper";
 import HomeAnimalCard from "./home-animal-card";
-import { ReactNode } from "react";
+import { ReactNode, useRef } from "react";
 import Link from "next/link";
 import {
   Pagination,
@@ -9,9 +9,16 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { useUrlSearchParams } from "@/hooks/use-url-search-params";
+import { Input } from "@/components/ui/input";
+import debounce from "lodash.debounce";
+import { RefreshCcwIcon } from "lucide-react";
 
 const List = ({ children }: { children: ReactNode }) => {
-  return <ul className="grid grid-cols-10 gap-4">{children}</ul>;
+  return (
+    <ul className="grid xl:grid-cols-8 lg:grid-cols-5 md:grid-cols-3 grid-cols-1 gap-4 md:justify-items-start justify-items-center">
+      {children}
+    </ul>
+  );
 };
 
 export default function HomeView() {
@@ -31,19 +38,42 @@ export default function HomeView() {
       searchParams.setParam("page", currentPage + 1);
     }
   };
+
+  const debouncedSearch = useRef(
+    debounce((value: string) => {
+      searchParams.setParam("q", value);
+    }, 1000),
+  ).current;
+
   return (
     <div className="p-4 flex flex-col gap-4">
-      <Pagination>
-        <PaginationPrevious onClick={handlePrevPage} />
-        <PaginationNext onClick={handleNextPage} />
-      </Pagination>
+      <div className="flex items-center justify-between md:flex-row flex-col gap-4 md:gap-0">
+        <div className="flex items-center justify-center md:justify-start gap-4 w-full md:max-w-[50%]">
+          <Input
+            onInput={(e) => debouncedSearch(e.currentTarget.value)}
+            className="w-full md:max-w-[400px] max-w-max"
+            placeholder="Search for a breed..."
+          />
+          <RefreshCcwIcon onClick={() => searchParams.clearAll()} />
+        </div>
+        <div>
+          <Pagination>
+            <PaginationPrevious onClick={handlePrevPage} />
+            <PaginationNext onClick={handleNextPage} />
+          </Pagination>
+        </div>
+      </div>
       <div>
         <h2>Cats</h2>
         <List>
           {catBreeds.length > 0 ? (
             catBreeds.map((breed) => (
-              <Link key={breed.id} href={`/breeds/cat/${breed.id}`}>
-                <li>
+              <Link
+                className="w-full"
+                key={breed.id}
+                href={`/breeds/cat/${breed.id}`}
+              >
+                <li className="w-full">
                   <HomeAnimalCard type="cat" breed={breed} />
                 </li>
               </Link>

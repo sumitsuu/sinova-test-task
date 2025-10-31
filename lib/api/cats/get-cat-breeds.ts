@@ -20,15 +20,16 @@ export async function getCatBreeds({
       )
     : "";
 
-  const res = await fetch(
-    `https://api.thecatapi.com/v1/breeds?${parsedSearchParams.toString()}`,
-    {
-      headers: {
-        "x-apy-key": process.env.catsAPIKey,
-      },
-      cache: "no-store",
+  const url = searchParams?.q
+    ? ` https://api.thecatapi.com/v1/breeds/search/`
+    : ` https://api.thecatapi.com/v1/breeds`;
+
+  const res = await fetch(`${url}?${parsedSearchParams.toString()}`, {
+    headers: {
+      "x-apy-key": process.env.catsAPIKey,
     },
-  );
+    cache: "no-store",
+  });
 
   if (!res.ok) {
     throw new Error("Failed to fetch breeds");

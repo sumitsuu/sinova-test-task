@@ -18,15 +18,16 @@ export async function getDogBreeds({
       .map(([key, value]) => [key, String(value)]),
   );
 
-  const res = await fetch(
-    `https://api.thedogapi.com/v1/breeds?${parsedSearchParams.toString()}`,
-    {
-      headers: {
-        "x-apy-key": process.env.dogsAPIKey,
-      },
-      cache: "no-store",
+  const url = searchParams?.q
+    ? ` https://api.thedogapi.com/v1/breeds/search/`
+    : ` https://api.thedogapi.com/v1/breeds`;
+
+  const res = await fetch(`${url}?${parsedSearchParams.toString()}`, {
+    headers: {
+      "x-apy-key": process.env.dogsAPIKey,
     },
-  );
+    cache: "no-store",
+  });
 
   if (!res.ok) {
     throw new Error("Failed to fetch breeds");
