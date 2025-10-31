@@ -1,7 +1,7 @@
 "use client";
 import { useHomeContext } from "./home-view-context-wrapper";
 import HomeAnimalCard from "./home-animal-card";
-import { ReactNode, useRef } from "react";
+import { ReactNode, useRef, useState } from "react";
 import Link from "next/link";
 import {
   Pagination,
@@ -24,6 +24,7 @@ const List = ({ children }: { children: ReactNode }) => {
 export default function HomeView() {
   const { catBreeds, dogBreeds } = useHomeContext();
   const searchParams = useUrlSearchParams();
+  const [searchValue, setSearchValue] = useState("");
 
   const handlePrevPage = () => {
     const currentPage = Number(searchParams.get("page"));
@@ -45,16 +46,27 @@ export default function HomeView() {
     }, 1000),
   ).current;
 
+  const handleSearchChange = (value: string) => {
+    setSearchValue(value);
+    debouncedSearch(value);
+  };
+
+  const handleClearAll = () => {
+    setSearchValue("");
+    searchParams.clearAll();
+  };
+
   return (
     <div className="p-4 flex flex-col gap-4">
       <div className="flex items-center justify-between md:flex-row flex-col gap-4 md:gap-0">
         <div className="flex items-center justify-center md:justify-start gap-4 w-full md:max-w-[50%]">
           <Input
-            onInput={(e) => debouncedSearch(e.currentTarget.value)}
+            value={searchValue}
+            onInput={(e) => handleSearchChange(e.currentTarget.value)}
             className="w-full md:max-w-[400px] max-w-max"
             placeholder="Search for a breed..."
           />
-          <RefreshCcwIcon onClick={() => searchParams.clearAll()} />
+          <RefreshCcwIcon onClick={handleClearAll} className="cursor-pointer" />
         </div>
         <div>
           <Pagination>

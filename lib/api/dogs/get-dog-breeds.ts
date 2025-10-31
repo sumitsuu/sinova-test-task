@@ -3,7 +3,7 @@ import { Pagination } from "@/types/pagination";
 import "dotenv/config";
 
 type GetDogBreedsProps = {
-  searchParams: Pagination;
+  searchParams?: Pagination;
 };
 
 export async function getDogBreeds({
@@ -12,15 +12,17 @@ export async function getDogBreeds({
   if (!process.env.dogsAPIKey)
     throw new Error("Please specify dogsAPIKey env variable.");
 
-  const parsedSearchParams = new URLSearchParams(
-    Object.entries(searchParams)
-      .filter(([_, value]) => value !== undefined && value !== null)
-      .map(([key, value]) => [key, String(value)]),
-  );
+  const parsedSearchParams = searchParams
+    ? new URLSearchParams(
+        Object.entries(searchParams)
+          .filter(([_, value]) => value !== undefined && value !== null)
+          .map(([key, value]) => [key, String(value)]),
+      )
+    : "";
 
   const url = searchParams?.q
-    ? ` https://api.thedogapi.com/v1/breeds/search/`
-    : ` https://api.thedogapi.com/v1/breeds`;
+    ? `https://api.thedogapi.com/v1/breeds/search/`
+    : `https://api.thedogapi.com/v1/breeds`;
 
   const res = await fetch(`${url}?${parsedSearchParams.toString()}`, {
     headers: {
