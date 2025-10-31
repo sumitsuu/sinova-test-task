@@ -87,8 +87,12 @@ export default function HomeView() {
         <List>
           {dogBreeds.length > 0 ? (
             dogBreeds.map((breed) => (
-              <Link key={breed.id} href={`/breeds/dog/${breed.id}`}>
-                <li>
+              <Link
+                className="w-full"
+                key={breed.id}
+                href={`/breeds/dog/${breed.id}`}
+              >
+                <li className="w-full">
                   <HomeAnimalCard type="dog" breed={breed} />
                 </li>
               </Link>
